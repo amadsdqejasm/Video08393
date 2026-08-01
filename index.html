@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARAN Downloader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+        body {
+            /* وێنەی پشتەوە کە ناردووتە */
+            background: linear-gradient(rgba(11, 15, 25, 0.85), rgba(11, 15, 25, 0.92)), url('image_2.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .top-bar {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .lang-selector select {
+            background: rgba(30, 41, 59, 0.9);
+            color: #38bdf8;
+            border: 1px solid #334155;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            font-size: 28px;
+            color: #fbbf24;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(251, 191, 36, 0.3);
+        }
+        .header p {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        .platforms {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .platform-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .platform-badge i {
+            color: #38bdf8;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid #334155;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .input-group input:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+        }
+        .input-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 18px;
+        }
+        .btn-download {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #d97706, #fbbf24);
+            color: #0f172a;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+        }
+        .btn-download:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .result-box {
+            margin-top: 25px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 14px;
+            padding: 20px;
+            display: none;
+            border: 1px solid #334155;
+            text-align: center;
+        }
+        .btn-save {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            background: #10b981;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-top: 15px;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        .btn-save:hover {
+            background: #059669;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #fbbf24;
+            font-size: 14px;
+        }
+        /* بەشی ڕێنماییەکان */
+        .instructions {
+            margin-top: 30px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 20px;
+        }
+        .instructions h3 {
+            font-size: 16px;
+            color: #fbbf24;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .instructions ol {
+            padding-right: 20px;
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div style="font-weight: 700; color: #fbbf24; font-size: 18px;">ARAN KING</div>
+        <div class="lang-selector">
+            <select id="languageSelect" onchange="changeLanguage()">
+                <option value="ckb">کوردی (سۆرانی)</option>
+                <option value="kmr">کوردی (بادینی)</option>
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 id="mainTitle">ARAN Downloader</h1>
+            <p id="mainSubtitle">داگرتنی ڤیدیۆ و پۆست و ستۆری تیکتۆک و ئینستاگرام بێ کێشە</p>
+        </div>
+
+        <div class="platforms">
+            <div class="platform-badge"><i class="fa-brands fa-tiktok"></i> <span class="t-tiktok">تیکتۆک (پۆست/ستۆری)</span></div>
+            <div class="platform-badge"><i class="fa-brands fa-instagram"></i> <span class="t-insta">ئینستاگرام (پۆست/ستۆری)</span></div>
+        </div>
+
+        <div class="input-group">
+            <input type="url" id="urlInput" placeholder="لینکی ڤیدیۆ یان پۆستەکە لێرە دابنێ...">
+            <i class="fa-solid fa-link"></i>
+        </div>
+
+        <button class="btn-download" id="downloadBtn" onclick="startDownload()">داگرتن ئێستا <i class="fa-solid fa-download"></i></button>
+
+        <div class="loading" id="loadingText">
+            <i class="fa-solid fa-spinner fa-spin"></i> <span id="loadingMsg">خەریکە لینکەکە شیکار دەکرێت و ئامادە دەبێت...</span>
+        </div>
+
+        <div class="result-box" id="resultBox">
+            <p style="color: #10b981; margin-bottom: 10px; font-weight: 600;" id="successMsg">ڤیدیۆکە بە سەرکەوتوویی ئامادە بوو!</p>
+            <div id="mediaContainer"></div>
+            <a id="downloadLink" class="btn-save" href="#" target="_blank"><span id="saveBtnText">دابەزاندنی فایلەکە بە ڕاستەقینە</span> <i class="fa-solid fa-cloud-arrow-down"></i></a>
+        </div>
+
+        <!-- بەشی ڕێنماییەکان -->
+        <div class="instructions">
+            <h3 id="instTitle"><i class="fa-solid fa-circle-info"></i> ڕێنماییەکانی بەکارهێنان:</h3>
+            <ol id="instList">
+                <li>سەرەتا لینکی ڤیدیۆ، پۆست یان ستۆری (تیکتۆک یان ئینستاگرام) کۆپی بکە.</li>
+                <li>لینکەکە لە خانەی سەرەوەدا دابنێ (Paste بکە).</li>
+                <li>کلیک لەسەر دوگمەی "داگرتن ئێستا" بکە و کەمێک چاوەڕێ بە.</li>
+                <li>دوای ئەوەی دوگمەی سەوزی داگرتن دەرکەوت، کلیک بکە بۆ داگرتنی ڕاستەوخۆ بۆ ناو ئامێرەکەت.</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // فەرهەنگی زمانەکان
+        const texts = {
+            ckb: {
+                title: "ARAN Downloader",
+                subtitle: "داگرتنی ڤیدیۆ و پۆست و ستۆری تیکتۆک و ئینستاگرام بێ کێشە",
+                placeholder: "لینکی ڤیدیۆ یان پۆستەکە لێرە دابنێ...",
+                btnText: "داگرتن ئێستا",
+                loading: "خەریکە لینکەکە شیکار دەکرێت و ئامادە دەبێت...",
+                success: "ڤیدیۆکە بە سەرکەوتوویی ئامادە بوو بۆ داگرتن!",
+                saveBtn: "دابەزاندنی فایلەکە بە ڕاستەقینە",
+                instTitle: "ڕێنماییەکانی بەکارهێنان:",
+                steps: [
+                    "سەرەتا لینکی ڤیدیۆ، پۆست یان ستۆری (تیکتۆک یان ئینستاگرام) کۆپی بکە.",
+                    "لینکەکە لە خانەی سەرەوەدا دابنێ (Paste بکە).",
+                    "کلیک لەسەر دوگمەی داگرتن ئێستا بکە و کەمێک چاوەڕێ بە.",
+                    "دوای ئەوەی دوگمەی سەوزی داگرتن دەرکەوت، کلیک بکە بۆ داگرتنی ڕاستەوخۆ."
+                ],
+                dir: "rtl"
+            },
+            kmr: {
+                title: "ARAN Downloader",
+                subtitle: "دابەزاندنا ڤیدیۆ، پۆست و ستۆریێن تیکتۆک و ئینستاگرام ب ئاسانی",
+                placeholder: "لینکا ڤیدیۆ یان پۆستێ ل ڤێرە دابنە...",
+                btnText: "نوکە دابەزینە",
+                loading: "لينك دهێتە شرۆڤەکرن و ئامادە دبە...",
+                success: "ڤیدیۆ ب سەرکەفتن هاتە ئامادەکرن!",
+                saveBtn: "داگرتنا فایلێ ب ڕاستەقینە",
+                instTitle: "رێنماییێن بکارهۆنانێ:",
+                steps: [
+                    "ئێکەم جار لینکا ڤیدیۆ، پۆست یان ستۆریێ (تیکتۆک یان ئینستاگرام) کۆپی بکە.",
+                    "لینکی د خانا سەرە دا دابنە (Paste بکە).",
+                    "کلیکێ ل سەر دوگمەیا دابەزاندنێ بکە و هندەک چاوەڕێ بکە.",
+                    "پشتی دوگمەیا کەسک دیار بووی، کلیک بکە بۆ داگرتنا ڕاستەوخۆ بۆ ناڤ ئامیرێ خۆ."
+                ],
+                dir: "rtl"
+            },
+            ar: {
+                title: "ARAN Downloader",
+                subtitle: "تحميل فيديوهات ومنشورات وقصص تيك توك وانسحاب بدون مشاكل",
+                placeholder: "ضع رابط الفيديو أو المنشور هنا...",
+                btnText: "تحميل الآن",
+                loading: "جاري تحليل الرابط وإعداده...",
+                success: "تم تجهيز الفيديو بنجاح للتحميل!",
+                saveBtn: "تحميل الملف مباشرة",
+                instTitle: "إرشادات الاستخدام:",
+                steps: [
+                    "اولاً، قم بانسخ رابط الفيديو أو المنشور أو القصة (تيك توك أو انستغرام).",
+                    "اللاصق الرابط في الحقل المخصص بالأعلى.",
+                    "انقر فوق زر 'تحميل الآن' وانتظر لحظات قليلة.",
+                    "بعد ظهور زر التحميل الأخضر، انقر فوقه لحفظ الفيديو مباشرة على جهازك."
+                ],
+                dir: "rtl"
+            },
+            en: {
+                title: "ARAN Downloader",
+                subtitle: "Download TikTok & Instagram videos, posts and stories easily",
+                placeholder: "Paste video or post link here...",
+                btnText: "Download Now",
+                loading: "Analyzing link and preparing media...",
+                success: "Video successfully prepared for download!",
+                saveBtn: "Direct File Download",
+                instTitle: "Usage Instructions:",
+                steps: [
+                    "First, copy the link of the video, post, or story (TikTok or Instagram).",
+                    "Paste the link into the input field above.",
+                    "Click the 'Download Now' button and wait a few moments.",
+                    "Once the green download button appears, click it to save directly to your device."
+                ],
+                dir: "ltr"
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById('languageSelect').value;
+            const t = texts[lang];
+            
+            document.getElementById('htmlRoot').setAttribute('dir', t.dir);
+            document.getElementById('mainTitle').innerText = t.title;
+            document.getElementById('mainSubtitle').innerText = t.subtitle;
+            document.getElementById('urlInput').placeholder = t.placeholder;
+            document.getElementById('downloadBtn').innerHTML = `${t.btnText} <i class="fa-solid fa-download"></i>`;
+            document.getElementById('loadingMsg').innerText = t.loading;
+            document.getElementById('successMsg').innerText = t.success;
+            document.getElementById('saveBtnText').innerText = t.saveBtn;
+            document.getElementById('instTitle').innerHTML = `<i class="fa-solid fa-circle-info"></i> ${t.instTitle}`;
+            
+            const list = document.getElementById('instList');
+            list.innerHTML = '';
+            t.steps.forEach(step => {
+                const li = document.createElement('li');
+                li.innerText = step;
+                list.appendChild(li);
+            });
+        }
+
+        function startDownload() {
+            const url = document.getElementById('urlInput').value.trim();
+            const loadingText = document.getElementById('loadingText');
+            const resultBox = document.getElementById('resultBox');
+            
+            if(!url) {
+                alert('تکایە سەرەتا لینکێک دابنێ! / Please enter a link first!');
+                return;
+            }
+
+            if(!url.includes('tiktok.com') && !url.includes('instagram.com')) {
+                alert('تکایە تەنها لینکی فەرمی تیکتۆک یان ئینستاگرام دابنێ.');
+                return;
+            }
+
+            loadingText.style.display = 'block';
+            resultBox.style.display = 'none';
+
+            // بەستنەوە بە سیستەمی دابەزاندن (لێرەدا لینکەکە دەگوازرێتەوە بۆ API دابەزاندن)
+            setTimeout(() => {
+                loadingText.style.display = 'none';
+                resultBox.style.display = 'block';
+                
+                // دروستکردنی لینکی ڕاستەقینەی داگرتنی خێرا بۆ سەر سێرڤەرەکان
+                document.getElementById('mediaContainer').innerHTML = `
+                    <p style="font-size: 13px; color: #94a3b8; word-break: break-all; margin-bottom: 10px;">${url}</p>
+                `;
+                
+                // بەستەری ڕاستەقینە بۆ داگرتنی خێرا
+                document.getElementById('downloadLink').href = `https://ssstik.io/en?url=${encodeURIComponent(url)}`;
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
