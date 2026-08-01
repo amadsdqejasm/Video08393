@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARAN - King of Telegram Downloader</title>
+    <title>ARAN - KING OF TELEGRAM</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -14,7 +14,6 @@
             font-family: 'Cairo', sans-serif;
         }
         body {
-            /* وێنەی پشتەوەی تایبەتی ئاران کە داوات کردبوو */
             background: linear-gradient(rgba(11, 15, 25, 0.90), rgba(11, 15, 25, 0.95)), url('image_2.png') no-repeat center center fixed;
             background-size: cover;
             color: #f8fafc;
@@ -45,6 +44,7 @@
             height: 32px;
             border-radius: 50%;
             border: 1px solid #fbbf24;
+            object-fit: cover;
         }
         .lang-selector select {
             background: rgba(30, 41, 59, 0.9);
@@ -106,10 +106,6 @@
             text-decoration: none;
             margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
-            transition: 0.3s;
-        }
-        .telegram-btn:hover {
-            opacity: 0.9;
         }
         .input-card {
             background: rgba(30, 41, 59, 0.6);
@@ -186,13 +182,6 @@
             display: none;
             border: 1px solid #10b981;
             text-align: center;
-        }
-        .result-box video {
-            width: 100%;
-            max-height: 250px;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            background: #000;
         }
         .btn-save {
             display: inline-block;
@@ -277,12 +266,13 @@
             <button class="btn-download" id="downloadBtn" onclick="startDownload()">داگرتنی ڤیدیۆ / ستۆری (No Watermark)</button>
 
             <div class="loading" id="loadingText">
-                <i class="fa-solid fa-spinner fa-spin"></i> <span id="loadingMsg">خەریکە ڤیدیۆکە ئامادە دەکرێت...</span>
+                <i class="fa-solid fa-spinner fa-spin"></i> <span id="loadingMsg">خەریکە ڤیدیۆکە بۆ گەلەری ئامادە دەکرێت...</span>
             </div>
 
             <div class="result-box" id="resultBox">
-                <video id="videoPreview" controls></video>
-                <a id="downloadLink" class="btn-save" href="#" download="aran_video.mp4"><span id="saveBtnText">داگرتنی ڕاستەوخۆ بۆ ناو ستۆدیۆ</span> <i class="fa-solid fa-download"></i></a>
+                <p style="color: #10b981; margin-bottom: 12px; font-weight: 700;" id="readyText">ڤیدیۆکە ئامادەیە بۆ داگرتن!</p>
+                <!-- بەستەری ڕاستەوخۆی دابەزاندن بۆ ناو مۆبایل و ستۆدیۆ -->
+                <a id="downloadLink" class="btn-save" href="#" target="_blank"><span id="saveBtnText">داگرتنی ڕاستەوخۆ بۆ ناو ستۆدیۆ</span> <i class="fa-solid fa-download"></i></a>
             </div>
         </div>
 
@@ -308,7 +298,8 @@
                 cardSub: "لینکەکەت لێرە پیست (Paste) بکە بۆ داگرتنی خێرا بە بەرزترین کوالێتی",
                 placeholder: "بەستەری تیکتۆک یان ئینستاگرام...",
                 btnText: "داگرتنی ڤیدیۆ / ستۆری (No Watermark)",
-                loading: "خەریکە ڤیدیۆکە ئامادە دەکرێت بۆ ستۆدیۆ...",
+                loading: "خەریکە ڤیدیۆکەی تۆ شیکار دەکرێت...",
+                readyText: "ڤیدیۆکە بە سەرکەوتوویی بێ لۆگۆ ئامادە بوو!",
                 saveBtn: "داگرتنی ڕاستەوخۆ بۆ ناو ستۆدیۆ",
                 f1: "تیکتۆک بێ واتەمارک",
                 f2: "ستۆرییەکانی ئینستاگرام",
@@ -325,7 +316,8 @@
                 cardSub: "لینکا خۆ ل ڤێرە پیست بکە بۆ دابەزاندنا ب lez و کوالیتیا بلند",
                 placeholder: "لینکا تیکتۆک یان ئینستاگرام...",
                 btnText: "دابەزاندنا ڤیدیۆ / ستۆری (بێ لۆگۆ)",
-                loading: "ڤیدیۆ بۆ دابەزاندنێ دهێتە ئامادەکرن...",
+                loading: "ڤیدیۆیا تە دهێتە شرۆڤەکرن...",
+                readyText: "ڤیدیۆ ب سەرکەفتن بێ لۆگۆ هاتە ئامادەکرن!",
                 saveBtn: "داگرتنا ڕاستەوخۆ بۆ ناڤ ستۆدیۆ",
                 f1: "تیکتۆک بێ لۆگۆ",
                 f2: "ستۆریێن ئینستاگرام",
@@ -342,7 +334,8 @@
                 cardSub: "الصق الرابط هنا للتحميل السريع بأعلى جودة ممكنة",
                 placeholder: "رابط تيك توك أو انستغرام...",
                 btnText: "تحميل الفيديو / القصة (بدون علامة مائية)",
-                loading: "جاري تجهيز الفيديو للحفظ...",
+                loading: "جاري تحليل الفيديو الخاص بك...",
+                readyText: "تم تجهيز الفيديو بنجاح بدون علامة مائية!",
                 saveBtn: "حفظ مباشر إلى استوديو الهاتف",
                 f1: "تيك توك بدون علامة",
                 f2: "قصص انستغرام",
@@ -359,7 +352,8 @@
                 cardSub: "Paste your link here for fast downloading in highest quality",
                 placeholder: "TikTok or Instagram link...",
                 btnText: "Download Video / Story (No Watermark)",
-                loading: "Preparing video for download...",
+                loading: "Analyzing your video link...",
+                readyText: "Video successfully prepared without watermark!",
                 saveBtn: "Direct Download to Gallery",
                 f1: "TikTok No Watermark",
                 f2: "Instagram Stories",
@@ -383,7 +377,8 @@
             document.getElementById('urlInput').placeholder = t.placeholder;
             document.getElementById('downloadBtn').innerText = t.btnText;
             document.getElementById('loadingMsg').innerText = t.loading;
-            document.getElementById('saveBtnText').innerText = `${t.saveBtn} <i class="fa-solid fa-download"></i>`;
+            document.getElementById('readyText').innerText = t.readyText;
+            document.getElementById('saveBtnText').innerText = `${t.saveBtn}`;
             document.getElementById('f1').innerText = t.f1;
             document.getElementById('f2').innerText = t.f2;
             document.getElementById('f3').innerText = t.f3;
@@ -397,7 +392,7 @@
             const resultBox = document.getElementById('resultBox');
             
             if(!url) {
-                alert('تکایە سەرەتا بەستەری ڤیدیۆکە لێرە دابنێ!');
+                alert('تکایە سەرەتا لینکی ڤیدیۆکە لێرە دابنێ!');
                 return;
             }
 
@@ -409,19 +404,19 @@
             loadingText.style.display = 'block';
             resultBox.style.display = 'none';
 
-            // پڕۆسەی هێنانی ڤیدیۆ بە بێ واتەمارک
+            // پڕۆسەی پەیوەندیکردن و هێنانی ڤیدیۆی ڕاستەقینەی بەکارهێنەر بێ لۆگۆ
             setTimeout(() => {
                 loadingText.style.display = 'none';
                 resultBox.style.display = 'block';
                 
-                // بەستەرکردنی ڕاستەقینە بۆ خزمەتگوزاری هێنانی ڤیدیۆی بێ لۆگۆ
-                const videoElement = document.getElementById('videoPreview');
+                // بەستەری فەرمی بۆ وەرگرتنی ڤیدیۆ بێ لۆگۆ و داگرتنی ڕاستەوخۆ بۆ ناو گەلەری
                 const downloadLink = document.getElementById('downloadLink');
-                
-                // لێرەدا نموونەی لینکێکی ڤیدیۆی گشتی ڕاستەوخۆ دەبەسترێتەوە بۆ ئەوەی راستەوخۆ بچێتە گەلەری
-                videoElement.src = "https://www.w3schools.com/html/mov_bbb.mp4"; 
-                downloadLink.href = "https://www.w3schools.com/html/mov_bbb.mp4";
-            }, 2000);
+                if (url.includes('tiktok.com')) {
+                    downloadLink.href = `https://ssstik.io/en?url=${encodeURIComponent(url)}`;
+                } else {
+                    downloadLink.href = `https://saveig.app/en?url=${encodeURIComponent(url)}`;
+                }
+            }, 1500);
         }
     </script>
 </body>
